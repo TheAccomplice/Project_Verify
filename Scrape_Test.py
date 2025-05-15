@@ -1,8 +1,9 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
 # URL of the news article
-url = "https://www.channelnewsasia.com/singapore/ge2025-singapore-election-pap-pm-lawrence-wong-strong-mandate-5107136"
+url = input("Url:")
 
 # Send HTTP GET request
 response = requests.get(url)
@@ -21,8 +22,10 @@ paragraphs = article_body.find_all('p') if article_body else []
 content = "\n".join(p.get_text(strip=True) for p in paragraphs)
 
 # Filename-safe title (remove problematic characters)
+folder = "Articles"
+os.makedirs(folder, exist_ok=True)  # Ensure the folder exists
 safe_title = "".join(c for c in title_text if c.isalnum() or c in (' ', '_')).rstrip()
-filename = f"{safe_title[:101]}.txt"  # limit to 101 characters
+filename = os.path.join(folder, f"{safe_title[:101]}.txt")  # File path under folder
 
 # Save to local file
 with open(filename, 'w', encoding='utf-8') as f:
